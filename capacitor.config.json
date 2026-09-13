@@ -1,0 +1,8 @@
+{
+  "appId": "io.starfleet.lcars.pad",
+  "appName": "LCARS Pad",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .lcars-corner-tl {
+    border-top-left-radius: 2rem;
+  }
+  .lcars-corner-tr {
+    border-top-right-radius: 2rem;
+  }
+  .lcars-corner-bl {
+    border-bottom-left-radius: 2rem;
+  }
+  .lcars-corner-br {
+    border-bottom-right-radius: 2rem;
+  }
+  
+  .lcars-pill-left {
+    border-radius: 9999px 0 0 9999px;
+  }
+  .lcars-pill-right {
+    border-radius: 0 9999px 9999px 0;
+  }
+  .lcars-pill {
+    border-radius: 9999px;
+  }
+  
+  /* LCARS scanline effect */
+  .lcars-scanlines {
+    background: linear-gradient(
+      rgba(18, 16, 16, 0) 50%, 
+      rgba(0, 0, 0, 0.25) 50%
+    ), linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.03),
+      rgba(0, 255, 0, 0.01),
+      rgba(0, 0, 255, 0.03)
+    );
+    background-size: 100% 3px, 6px 100%;
+    pointer-events: none;
+  }
+
+  /* Glow effects */
+  .lcars-glow-gold {
+    box-shadow: 0 0 15px rgba(255, 153, 0, 0.35);
+  }
+  .lcars-glow-red {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+  }
+}

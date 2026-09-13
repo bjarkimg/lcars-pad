@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LCARS Pad</string>
+    <string name="title_activity_main">LCARS Pad</string>
+    <string name="package_name">io.starfleet.lcars.pad</string>
+    <string name="custom_url_scheme">io.starfleet.lcars.pad</string>
+</resources>
