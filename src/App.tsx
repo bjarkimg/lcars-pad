@@ -20,6 +20,7 @@ export const App: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<ActiveTab>(getInitialTab);
   const [alertLevel, setAlertLevel] = useState<AlertLevel>('normal');
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const syncTab = () => setActiveTab(getInitialTab());
@@ -30,6 +31,45 @@ export const App: React.FC = () => {
       window.removeEventListener('popstate', syncTab);
     };
   }, []);
+
+  useEffect(() => {
+    const syncFs = () => {
+      const doc = document as Document & { webkitFullscreenElement?: Element | null };
+      setIsFullscreen(Boolean(document.fullscreenElement || doc.webkitFullscreenElement));
+    };
+    syncFs();
+    document.addEventListener('fullscreenchange', syncFs);
+    document.addEventListener('webkitfullscreenchange', syncFs);
+    return () => {
+      document.removeEventListener('fullscreenchange', syncFs);
+      document.removeEventListener('webkitfullscreenchange', syncFs);
+    };
+  }, []);
+
+  const toggleFullscreen = async () => {
+    try {
+      const doc = document as Document & {
+        webkitFullscreenElement?: Element | null;
+        webkitExitFullscreen?: () => void;
+      };
+      const el = document.documentElement as HTMLElement & {
+        webkitRequestFullscreen?: () => void;
+      };
+      const active = document.fullscreenElement || doc.webkitFullscreenElement;
+      if (!active) {
+        if (el.requestFullscreen) await el.requestFullscreen();
+        else el.webkitRequestFullscreen?.();
+      } else if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      } else {
+        doc.webkitExitFullscreen?.();
+      }
+      sounds.playAcknowledge();
+    } catch (err) {
+      console.warn('Fullscreen toggle failed:', err);
+      sounds.playError();
+    }
+  };
 
   const navItems: { id: ActiveTab; label: string; code: string; color: keyof typeof LCARS_COLORS }[] = [
     { id: 'sudoku', label: 'SUDOKU', code: 'SDK-06', color: 'ice' },
@@ -88,6 +128,17 @@ export const App: React.FC = () => {
                 </LcarsButton>
               );
             })}
+            <LcarsButton
+              color="ice"
+              pill="left"
+              variant={isFullscreen ? 'solid' : 'outline'}
+              code="FS"
+              className="w-full py-2.5 sm:py-3 text-xs sm:text-sm"
+              soundType="menu"
+              onClick={() => void toggleFullscreen()}
+            >
+              {isFullscreen ? 'EXIT FULL' : 'FULLSCREEN'}
+            </LcarsButton>
           </div>
           <div className="flex flex-col space-y-1.5 pt-2 border-t border-zinc-800">
             <span className="font-mono-tech text-[9px] sm:text-[10px] text-zinc-500 px-1">ALERT MODE</span>
